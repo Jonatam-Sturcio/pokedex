@@ -8,17 +8,20 @@
       <div class="card app-card-pokemon">
         <div class="card-header border-bottom-0 bg-transparent text-center">
           <label class="card-title fs-5 fw-bold">{{ pokemon.nome }}</label>
-          <div>
-            <span class="border px-3 py-1 rounded-pill text-center"
-              >Tipo do Pokémon</span
+          <div class="d-flex justify-content-center gap-2">
+            <span
+              *ngFor="let tipo of pokemon.tipos"
+              [ngClass]="coresBackgroundTipo[tipo.nome]"
+              class="border px-3 py-1 rounded-pill text-center"
+              >{{ tipo.nome }}</span
             >
           </div>
         </div>
         <div class="card-body d-flex justify-content-center">
           <img
             class="app-img-pokemon img-fluid card-img-bottom"
-            src="pokeball.svg"
-            alt="Teste"
+            [src]="pokemon.urlSprite"
+            alt="Foto do {{ pokemon.nome }}"
           />
         </div>
       </div>
