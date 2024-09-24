@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
   private mapearPokemon(obj: any): Pokemon {
     return {
       nome: converterParaTitleCase(obj.name),
-      urlSprite: obj.sprites.other.home.front_default,
+      urlSprite: obj.sprites.other['official-artwork'].front_default,
       tipos: obj.types.map(this.mapearTipoPokemon),
     };
   }
