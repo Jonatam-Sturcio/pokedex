@@ -45,16 +45,18 @@ export class ListagemComponent implements OnInit {
     this.PokeApiService.selecionarTodos().subscribe((res) => {
       const arrayResultados = res.results as any[];
 
+      let i = 0;
       for (let resultado of arrayResultados) {
         this.PokeApiService.selecionarDetalhesPorUrl(resultado.url).subscribe(
           (objDetalhes: any) => {
             const pokemon = this.mapearPokemon(objDetalhes);
 
             this.pokemons.push(pokemon);
+
+            if (i == arrayResultados.length) this.pokemons.sort((p) => p.id);
           }
         );
       }
-      this.pokemons.sort((p) => p.id);
     });
   }
   private mapearPokemon(obj: any): Pokemon {
