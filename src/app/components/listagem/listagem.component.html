@@ -5,7 +5,11 @@
       class="col-10 col-md-6 col-lg-4 col-xl-3 mt-4"
     >
       <div class="card app-card-pokemon">
-        <a class="stretched-link" routerLink="/detalhes"></a>
+        <a
+          class="stretched-link"
+          title="Detalhes de {{ pokemon.nome }}"
+          [routerLink]="['/detalhes', pokemon.id]"
+        ></a>
         <div class="card-header border-bottom-0 bg-transparent text-center">
           <label class="card-title fs-5 fw-bold">{{ pokemon.nome }}</label>
           <div class="d-flex justify-content-center gap-2">

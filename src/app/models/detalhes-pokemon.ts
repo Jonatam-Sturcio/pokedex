@@ -1,8 +1,10 @@
 import { TipoPokemon } from './tipo-pokemon';
 
-export interface Pokemon {
+export interface DetalhesPokemon {
   id: number;
   nome: string;
-  urlSprite: string;
+  sprites: string[];
   tipos: TipoPokemon[];
+  altura: number;
+  peso: number;
 }

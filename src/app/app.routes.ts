@@ -5,5 +5,5 @@ import { DetalhesComponent } from './components/detalhes/detalhes.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'listagem', pathMatch: 'full' },
   { path: 'listagem', component: ListagemComponent },
-  { path: 'detalhes', component: DetalhesComponent },
+  { path: 'detalhes/:id', component: DetalhesComponent },
 ];

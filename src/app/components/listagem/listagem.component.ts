@@ -5,6 +5,7 @@ import { PokemonApiService } from '../../services/pokemon-api.service';
 import { converterParaTitleCase } from '../../util/converter-para-title-case';
 import { TipoPokemon } from '../../models/tipo-pokemon';
 import { RouterLink } from '@angular/router';
+import { mapearTipoPokemon } from '../../util/mapear-tipo-pokemon';
 
 @Component({
   selector: 'app-listagem',
@@ -53,17 +54,15 @@ export class ListagemComponent implements OnInit {
           }
         );
       }
+      this.pokemons.sort((p) => p.id);
     });
   }
   private mapearPokemon(obj: any): Pokemon {
     return {
+      id: obj.id,
       nome: converterParaTitleCase(obj.name),
       urlSprite: obj.sprites.other['official-artwork'].front_default,
-      tipos: obj.types.map(this.mapearTipoPokemon),
+      tipos: obj.types.map(mapearTipoPokemon),
     };
-  }
-
-  private mapearTipoPokemon(obj: any): TipoPokemon {
-    return { nome: converterParaTitleCase(obj.type.name) };
   }
 }
