@@ -112,7 +112,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "https://Jonatam-Sturcio.github.io/pokedex",
+            "baseHref": "https://Jonatam-Sturcio.github.io/pokedex/",
             "repo": "https://github.com/Jonatam-Sturcio/pokedex.git"
           }
         }
