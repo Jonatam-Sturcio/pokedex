@@ -10,8 +10,9 @@ export class PokemonApiService {
 
   constructor(private http: HttpClient) {}
 
-  public selecionarTodos(): Observable<any> {
-    return this.http.get(this.url);
+  public selecionarTodos(offset: number = 0): Observable<any> {
+    const urlCompleto = `${this.url}?offset=${offset}`;
+    return this.http.get(urlCompleto);
   }
   public selecionarDetalhesPorUrl(url: string): Observable<any> {
     return this.http.get<any>(url);

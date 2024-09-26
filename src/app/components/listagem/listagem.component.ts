@@ -1,64 +1,79 @@
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Pokemon } from '../../models/pokemon';
 import { PokemonApiService } from '../../services/pokemon-api.service';
 import { converterParaTitleCase } from '../../util/converter-para-title-case';
-import { TipoPokemon } from '../../models/tipo-pokemon';
 import { RouterLink } from '@angular/router';
 import { mapearTipoPokemon } from '../../util/mapear-tipo-pokemon';
+import { CardPokemonComponent } from './card-pokemon/card-pokemon.component';
+import { BuscaComponent } from '../busca/busca.component';
 
 @Component({
   selector: 'app-listagem',
   standalone: true,
-  imports: [NgForOf, NgClass, RouterLink],
+  imports: [
+    NgForOf,
+    NgClass,
+    RouterLink,
+    CardPokemonComponent,
+    BuscaComponent,
+    NgIf,
+  ],
   templateUrl: './listagem.component.html',
-  styleUrl: './listagem.component.scss',
 })
 export class ListagemComponent implements OnInit {
   public pokemons: Pokemon[];
-
-  public coresBackgroundTipo: any = {
-    Normal: 'fundo-tipo-normal',
-    Fire: 'fundo-tipo-fogo',
-    Water: 'fundo-tipo-agua',
-    Electric: 'fundo-tipo-eletrico',
-    Ice: 'fundo-tipo-gelo',
-    Grass: 'fundo-tipo-grama',
-    Bug: 'fundo-tipo-inseto',
-    Poison: 'fundo-tipo-veneno',
-    Flying: 'fundo-tipo-voador',
-    Ground: 'fundo-tipo-terra',
-    Rock: 'fundo-tipo-pedra',
-    Fighting: 'fundo-tipo-lutador',
-    Psychic: 'fundo-tipo-psiquico',
-    Ghost: 'fundo-tipo-fantasma',
-    Dark: 'fundo-tipo-sombrio',
-    Fairy: 'fundo-tipo-fada',
-    Steel: 'fundo-tipo-aco',
-  };
+  private offsetPaginacao: number;
+  public buscaRealizada: boolean = false;
 
   constructor(private PokeApiService: PokemonApiService) {
     this.pokemons = [];
+    this.offsetPaginacao = 0;
   }
 
-  ngOnInit(): void {
-    this.PokeApiService.selecionarTodos().subscribe((res) => {
-      const arrayResultados = res.results as any[];
+  public ngOnInit(): void {
+    this.obterPokemons();
+  }
 
-      let i = 0;
-      for (let resultado of arrayResultados) {
-        this.PokeApiService.selecionarDetalhesPorUrl(resultado.url).subscribe(
-          (objDetalhes: any) => {
-            const pokemon = this.mapearPokemon(objDetalhes);
+  public buscarMaisResultados(): void {
+    this.offsetPaginacao += 20;
 
-            this.pokemons.push(pokemon);
+    this.obterPokemons();
+  }
 
-            if (i == arrayResultados.length) this.pokemons.sort((p) => p.id);
-          }
-        );
-      }
+  public filtarPokemons(textoFiltro: string): void {
+    this.buscaRealizada = true;
+
+    this.pokemons = this.pokemons.filter((p) => {
+      return p.nome.toLowerCase().includes(textoFiltro);
     });
   }
+
+  private obterPokemons() {
+    this.PokeApiService.selecionarTodos(this.offsetPaginacao).subscribe(
+      (res) => {
+        const arrayResultados = res.results as any[];
+
+        for (let resultado of arrayResultados) {
+          this.PokeApiService.selecionarDetalhesPorUrl(resultado.url).subscribe(
+            (objDetalhes: any) => {
+              const pokemon = this.mapearPokemon(objDetalhes);
+
+              this.pokemons.push(pokemon);
+            }
+          );
+        }
+        this.pokemons.sort((p) => p.id);
+      }
+    );
+  }
+  public limparFiltro() {
+    this.buscaRealizada = false;
+
+    this.pokemons = [];
+    this.obterPokemons();
+  }
+
   private mapearPokemon(obj: any): Pokemon {
     return {
       id: obj.id,
