@@ -14,6 +14,7 @@ export class PokemonApiService {
     const urlCompleto = `${this.url}?offset=${offset}`;
     return this.http.get(urlCompleto);
   }
+
   public selecionarDetalhesPorUrl(url: string): Observable<any> {
     return this.http.get<any>(url);
   }

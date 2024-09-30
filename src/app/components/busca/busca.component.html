@@ -2,12 +2,17 @@
   <input
     #textoBusca
     [(ngModel)]="textoDigitado"
-    (keypress)="onBuscar(textoBusca.value)"
     class="col-9 rounded-4"
     placeholder="Qual pokemon deseja buscar?"
     type="text"
   />
-
+  <button
+    *ngIf="!buscaRealizada"
+    (click)="onBuscar(textoBusca.value)"
+    class="col-lg btn btn-lg btn-primary rounded-5"
+  >
+    Buscar
+  </button>
   <div *ngIf="buscaRealizada" class="d-flex justify-content-center my-2">
     <button
       (click)="onLimpar()"
