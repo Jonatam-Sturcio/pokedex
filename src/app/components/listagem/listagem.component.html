@@ -1,4 +1,8 @@
 <main aria-label="Listagem de Pokémons" class="container my-4">
+  <app-pokemons-favoritos
+    [pokemonsFavoritos]="pokemonsFavoritos"
+  ></app-pokemons-favoritos>
+
   <app-busca
     class="mt-4"
     (pesquisaFeita)="filtarPokemons($event)"

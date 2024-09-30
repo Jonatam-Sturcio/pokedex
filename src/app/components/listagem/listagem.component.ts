@@ -10,6 +10,7 @@ import { BuscaComponent } from '../busca/busca.component';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { StatusFavoritoPokemon } from '../../models/status-favorito-pokemon';
 import { LocalStorageService } from '../../services/local-storage-service';
+import { PokemonsFavoritosComponent } from './pokemons-favoritos/pokemons-favoritos.component';
 
 @Component({
   selector: 'app-listagem',
@@ -21,6 +22,7 @@ import { LocalStorageService } from '../../services/local-storage-service';
     CardPokemonComponent,
     BuscaComponent,
     NgIf,
+    PokemonsFavoritosComponent,
   ],
   templateUrl: './listagem.component.html',
 })
@@ -84,7 +86,6 @@ export class ListagemComponent implements OnInit {
     );
     this.pokemons.push(...this.pokemonsAux);
   }
-
   public limparFiltro() {
     this.buscaRealizada = false;
 
