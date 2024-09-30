@@ -9,6 +9,7 @@ import { CardPokemonComponent } from './card-pokemon/card-pokemon.component';
 import { BuscaComponent } from '../busca/busca.component';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { StatusFavoritoPokemon } from '../../models/status-favorito-pokemon';
+import { LocalStorageService } from '../../services/local-storage-service';
 
 @Component({
   selector: 'app-listagem',
@@ -25,20 +26,24 @@ import { StatusFavoritoPokemon } from '../../models/status-favorito-pokemon';
 })
 export class ListagemComponent implements OnInit {
   public pokemons: Pokemon[];
-  public pokemonsBackup: Pokemon[];
+  public pokemonsAux: Pokemon[];
   public pokemonsFavoritos: Pokemon[];
   private offsetPaginacao: number;
   public buscaRealizada: boolean = false;
 
-  constructor(private PokeApiService: PokemonApiService) {
+  constructor(
+    private PokeApiService: PokemonApiService,
+    private localStorageService: LocalStorageService
+  ) {
     this.pokemons = [];
-    this.pokemonsBackup = [];
+    this.pokemonsAux = [];
     this.pokemonsFavoritos = [];
     this.offsetPaginacao = 0;
   }
 
   public ngOnInit(): void {
     this.obterPokemons();
+    this.pokemonsFavoritos = this.localStorageService.obterFavoritos();
   }
 
   public buscarMaisResultados(): void {
@@ -64,7 +69,7 @@ export class ListagemComponent implements OnInit {
         );
         if (this.pokemons.length > 1)
           forkJoin(requests).subscribe((detailedPokemons: any[]) => {
-            this.pokemonsBackup = detailedPokemons.map((objDetalhes) =>
+            this.pokemonsAux = detailedPokemons.map((objDetalhes) =>
               this.mapearPokemon(objDetalhes)
             );
           });
@@ -77,7 +82,7 @@ export class ListagemComponent implements OnInit {
         this.pokemons.sort((p) => p.id);
       }
     );
-    this.pokemons.push(...this.pokemonsBackup);
+    this.pokemons.push(...this.pokemonsAux);
   }
 
   public limparFiltro() {
@@ -97,6 +102,8 @@ export class ListagemComponent implements OnInit {
     }
 
     status.pokemon.favorito != !status.pokemon.favorito;
+
+    this.localStorageService.salvarFavoritos(this.pokemonsFavoritos);
   }
 
   private mapearPokemon(obj: any): Pokemon {

@@ -1,0 +1,18 @@
+<div *ngIf="pokemonsFavoritos.length > 0" class="row justify-content-start g-3">
+  <h3>Pokémons Favoritos</h3>
+  <div *ngFor="let pokemon of pokemonsFavoritos" class="col-auto mt-4">
+    <div class="card p-2">
+      <a
+        class="stretched-link z-0"
+        [title]="pokemon.nome"
+        [routerLink]="['/detalhes', pokemon.id]"
+      ></a>
+      <img
+        class="img-fluid app-img-favorito"
+        [src]="pokemon.urlSprite"
+        [alt]="pokemon.nome"
+      />
+    </div>
+  </div>
+  <hr />
+</div>
