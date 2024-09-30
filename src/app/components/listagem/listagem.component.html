@@ -10,7 +10,10 @@
       *ngFor="let pokemon of pokemons"
       class="col-10 col-md-6 col-lg-4 col-xl-3 mt-4"
     >
-      <app-card-pokemon [pokemon]="pokemon"></app-card-pokemon>
+      <app-card-pokemon
+        [pokemon]="pokemon"
+        (statusFavoritoAlterado)="alternarStatusFavorito($event)"
+      ></app-card-pokemon>
     </div>
   </div>
   <div *ngIf="!buscaRealizada" class="d-flex justify-content-center mt-4">

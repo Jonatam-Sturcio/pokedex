@@ -8,6 +8,7 @@ import { mapearTipoPokemon } from '../../util/mapear-tipo-pokemon';
 import { CardPokemonComponent } from './card-pokemon/card-pokemon.component';
 import { BuscaComponent } from '../busca/busca.component';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { StatusFavoritoPokemon } from '../../models/status-favorito-pokemon';
 
 @Component({
   selector: 'app-listagem',
@@ -25,12 +26,14 @@ import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 export class ListagemComponent implements OnInit {
   public pokemons: Pokemon[];
   public pokemonsBackup: Pokemon[];
+  public pokemonsFavoritos: Pokemon[];
   private offsetPaginacao: number;
   public buscaRealizada: boolean = false;
 
   constructor(private PokeApiService: PokemonApiService) {
     this.pokemons = [];
     this.pokemonsBackup = [];
+    this.pokemonsFavoritos = [];
     this.offsetPaginacao = 0;
   }
 
@@ -84,12 +87,25 @@ export class ListagemComponent implements OnInit {
     this.obterPokemons();
   }
 
+  public alternarStatusFavorito(status: StatusFavoritoPokemon) {
+    if (status.statusFavorito == true) {
+      this.pokemonsFavoritos.push(status.pokemon);
+    } else {
+      this.pokemonsFavoritos = this.pokemonsFavoritos.filter(
+        (p) => p.id != status.pokemon.id
+      );
+    }
+
+    status.pokemon.favorito != !status.pokemon.favorito;
+  }
+
   private mapearPokemon(obj: any): Pokemon {
     return {
       id: obj.id,
       nome: converterParaTitleCase(obj.name),
       urlSprite: obj.sprites.other['official-artwork'].front_default,
       tipos: obj.types.map(mapearTipoPokemon),
+      favorito: this.pokemonsFavoritos.some((p) => p.id == obj.id),
     };
   }
 }
